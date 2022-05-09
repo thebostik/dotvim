@@ -19,9 +19,6 @@
 "    -> Work
 
 set nocompatible
-" disable OS X exit with non-zero error code
-filetype on
-" disabled to work around vundle ftdetect bug
 filetype off
 
 
@@ -37,10 +34,9 @@ filetype off
 " see :h vundle for more details or wiki for FAQ
 " NOTE: comments after Plugin command are not allowed.
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-    set rtp+=~/.vim/bundle/vundle/
-    call vundle#rc()
-    Plugin 'gmarik/vundle'
-
+    set rtp+=~/.vim/bundle/Vundle.vim/
+    call vundle#begin()
+	Plugin 'VundleVim/Vundle.vim'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vundle Plugins
@@ -94,6 +90,20 @@ filetype off
     Plugin 'dag/vim-fish'
     " Plugin 'jnwhiteh/vim-golang'
 
+    " Added stuff
+    "Plugin 'Valloric/YouCompleteMe'
+    Plugin 'jnurmine/Zenburn'
+    Plugin 'wincent/command-t'
+
+	" End vundle
+	call vundle#end()
+	filetype plugin indent on
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" YCM Settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    let g:ycm_autoclose_preview_window_after_insertion = 1
+    let g:ycm_auto_trigger = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " General Settings
@@ -225,13 +235,15 @@ filetype off
     " let g:zenburn_high_Contrast = 1
     " let g:zenburn_force_dark_Background = 1
     " let g:zenburn_unified_CursorColumn = 1
-    colorscheme zenburn
+    colors zenburn
 
     " highlight current line
     au ColorScheme * hi CursorLine term=underline ctermbg=darkblue
 
     " dark tab display for indent guides
-    set background=dark
+    let g:indent_guides_auto_colors = 0
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=240
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=235
 
     " see highlighted colors
     " :hi
@@ -418,12 +430,13 @@ filetype off
     " arrow keys allowed
     " inoremap <silent> <up> <esc>:bprev<cr>
     " inoremap <silent> <down> <esc>:bnext<cr>
-    inoremap <silent> <left> <esc>:tabprev<cr>
-    inoremap <silent> <right> <esc>:tabnext<cr>
+    "inoremap <silent> <left> <esc>:tabprev<cr>
+    "inoremap <silent> <right> <esc>:tabnext<cr>
     " noremap <silent> <up> :bprev<cr>
     " noremap <silent> <down> :bnext<cr>
-    noremap <silent> <left> :tabprev<cr>
-    noremap <silent> <right> :tabnext<cr>
+    "noremap <silent> <left> :tabprev<cr>
+    "noremap <silent> <right> :tabnext<cr>
+
 
     " move between tabs
     inoremap <silent> <c-h> <esc>:tabprev<cr>
@@ -557,17 +570,26 @@ filetype off
     map Y y$
 
     " yank and paste from system register / clipboard
-    vnoremap <leader>y "+y
-    vnoremap <leader>d "+d
-    nnoremap <leader>p "+p
-    nnoremap <leader>P "+P
-    vnoremap <leader>p "+p
-    vnoremap <leader>P "+P
+    "vnoremap <leader>y "*y
+    "vnoremap <leader>d "*d
+    "nnoremap <leader>p "*p
+    "nnoremap <leader>P "*P
+    "vnoremap <leader>p "*p
+    "vnoremap <leader>P "*P
+    
+    set clipboard=unnamed
+    inoremap <C-v> <ESC>"+pa
+    vnoremap <C-c> "+y
 
     nnoremap <c-a> GVgg
 
     " Use space instead of C-y for tab suggestion completion
     inoremap <expr> <space> pumvisible() ? "\<c-y>" : " "
+
+    " YCM goto
+    nnoremap <leader>g  :YcmCompleter GoTo<CR>
+    nnoremap <leader><right> :tabnext<cr>
+    nnoremap <leader><left> :tabprev<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -895,6 +917,8 @@ filetype off
     augroup END
 
     " indent lines with single argument per line
-    let @i = 't,llli'
+    let @i = 't,llli
+'
     " indent lines with single argument per line for piped commands
-    let @p = ':%s:\v\|:\r\|:'
+    let @p = ':%s:\v\|:\r\|:
+'
